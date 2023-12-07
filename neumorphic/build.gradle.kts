@@ -1,7 +1,72 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+
 plugins {
-    kotlin("android")
+    kotlin("multiplatform")
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetpack.compose)
+}
+
+kotlin {
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
+            }
+        }
+    }
+
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
+        }
+    }
+
+    ios()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "neumorphic"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material)
+                @OptIn(ExperimentalComposeLibrary::class)
+                api(compose.components.resources)
+                api(libs.androidx.annotation)
+                api(libs.skiko.common)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                api(libs.androidx.core.ktx)
+                api(libs.compose.ui)
+                api(libs.compose.ui.tooling.preview)
+                api(libs.androidx.activity.compose)
+            }
+        }
+        val desktopMain by getting {
+            dependencies {
+                api(compose.desktop.currentOs)
+            }
+        }
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by getting {
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
+    }
 }
 
 android {
@@ -10,8 +75,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -49,15 +112,6 @@ android {
 fun getArtifactName(): String {
     val versionName = project.rootProject.extra["artifactVersion"] as String
     return "neumorphic-$versionName.aar"
-}
-
-dependencies {
-    api(libs.androidx.core.ktx)
-    api(libs.compose.ui)
-    api(compose.runtime)
-    api(compose.foundation)
-    api(compose.material)
-    api(libs.compose.ui.tooling.preview)
 }
 
 apply(from = "./publish-android-library.gradle")
