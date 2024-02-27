@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.NativePaint
 import org.jetbrains.skia.FilterBlurMode
 import org.jetbrains.skia.MaskFilter
 
-
 internal actual fun Any.makeNormalBlur(
     blurRadius: Float,
     @ColorInt color: Int,

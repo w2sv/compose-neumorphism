@@ -14,21 +14,29 @@ import com.gandiva.neumorphic.shape.NeuShape
 import com.gandiva.neumorphic.shape.Oval
 import com.gandiva.neumorphic.shape.RoundedCorner
 
-
 internal expect fun Any.makeNormalBlur(
     blurRadius: Float,
     @ColorInt color: Int,
     strokeWidth: Float? = null
 )
 
-
 internal fun ContentDrawScope.drawBackgroundShadows(
     neuShape: NeuShape, style: NeuStyle
 ) {
     val elevation = style.shadowElevation.toPx()
 
-    drawBlurredBackground(style.lightSource, elevation, style.lightShadowColor.toArgb(), neuShape.cornerShape)
-    drawBlurredBackground(style.lightSource.opposite(), elevation, style.darkShadowColor.toArgb(), neuShape.cornerShape)
+    drawBlurredBackground(
+        style.lightSource,
+        elevation,
+        style.lightShadowColor.toArgb(),
+        neuShape.cornerShape
+    )
+    drawBlurredBackground(
+        style.lightSource.opposite(),
+        elevation,
+        style.darkShadowColor.toArgb(),
+        neuShape.cornerShape
+    )
 }
 
 private fun ContentDrawScope.drawBlurredBackground(
@@ -84,7 +92,12 @@ internal fun ContentDrawScope.drawForegroundShadows(
 ) {
     val elevation = style.shadowElevation.toPx()
 
-    drawForeground(style.lightSource, elevation, style.darkShadowColor.toArgb(), neuShape.cornerShape)
+    drawForeground(
+        style.lightSource,
+        elevation,
+        style.darkShadowColor.toArgb(),
+        neuShape.cornerShape
+    )
     drawForeground(
         style.lightSource.opposite(),
         elevation,
@@ -139,11 +152,21 @@ private fun ContentDrawScope.drawForeground(
                     paint
                 )
             }
+
             is RoundedCorner -> {
                 val cornerRadius = cornerShape.radius.toPx()
                 val visiblePath = Path().also { p ->
                     p.moveTo(0f, 0f)
-                    p.addRoundRect(RoundRect(0f, 0f, this.size.width, this.size.height, cornerRadius, cornerRadius))
+                    p.addRoundRect(
+                        RoundRect(
+                            0f,
+                            0f,
+                            this.size.width,
+                            this.size.height,
+                            cornerRadius,
+                            cornerRadius
+                        )
+                    )
                 }
 
                 canvas.clipPath(visiblePath)
@@ -161,6 +184,5 @@ private fun ContentDrawScope.drawForeground(
             }
         }
         canvas.restore()
-
     }
 }

@@ -10,7 +10,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
+                jvmTarget = JavaVersion.VERSION_17.toString()
             }
         }
     }
@@ -21,20 +21,20 @@ kotlin {
         }
     }
 
-    ios()
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "neumorphic"
-            isStatic = true
+    )
+        .forEach { iosTarget ->
+            iosTarget.binaries.framework {
+                baseName = "neumorphic"
+                isStatic = true
+            }
         }
-    }
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(compose.runtime)
                 api(compose.foundation)
@@ -45,7 +45,7 @@ kotlin {
                 api(libs.skiko.common)
             }
         }
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 api(libs.androidx.core.ktx)
                 api(libs.compose.ui)
@@ -57,14 +57,6 @@ kotlin {
             dependencies {
                 api(compose.desktop.currentOs)
             }
-        }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by getting {
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
         }
     }
 }
@@ -81,12 +73,11 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
@@ -100,18 +91,18 @@ android {
         }
     }
 
-    libraryVariants.all {
-        outputs.all {
-            packageLibraryProvider {
-                archiveFileName.set(getArtifactName())
-            }
-        }
-    }
+//    libraryVariants.all {
+//        outputs.all {
+//            packageLibraryProvider {
+//                archiveFileName.set(getArtifactName())
+//            }
+//        }
+//    }
 }
 
-fun getArtifactName(): String {
-    val versionName = project.rootProject.extra["artifactVersion"] as String
-    return "neumorphic-$versionName.aar"
-}
-
-apply(from = "./publish-android-library.gradle")
+//fun getArtifactName(): String {
+//    val versionName = project.rootProject.extra["artifactVersion"] as String
+//    return "neumorphic-$versionName.aar"
+//}
+//
+//apply(from = "./publish-android-library.gradle")

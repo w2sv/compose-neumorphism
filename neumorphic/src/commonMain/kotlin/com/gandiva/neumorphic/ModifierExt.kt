@@ -9,7 +9,6 @@ import com.gandiva.neumorphic.shape.Flat
 import com.gandiva.neumorphic.shape.NeuShape
 import com.gandiva.neumorphic.shape.RoundedCorner
 
-
 /**
  * Class used to capture all the neumorphic style attributes.
  *

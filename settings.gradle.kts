@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -20,5 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Neumorphism"
 
-include(":app")
+//include(":app")
 include(":neumorphic")

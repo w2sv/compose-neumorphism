@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.dokka) apply false
 }
 
-val artifactGroupId by extra("io.github.sridhar-sp")
-val artifactVersion by extra("0.0.6")
-
-apply(from = "neumorphic/maven-central-publish-root.gradle")
+//val artifactGroupId by extra("io.github.sridhar-sp")
+//val artifactVersion by extra("0.0.6")
+//
+//apply(from = "neumorphic/maven-central-publish-root.gradle")
