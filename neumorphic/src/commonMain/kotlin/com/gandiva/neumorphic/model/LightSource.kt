@@ -1,4 +1,4 @@
-package com.gandiva.neumorphic
+package com.gandiva.neumorphic.model
 
 /**
  * Light source constants with some utils functions.

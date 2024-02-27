@@ -9,10 +9,10 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
-import com.gandiva.neumorphic.shape.CornerShape
-import com.gandiva.neumorphic.shape.NeuShape
-import com.gandiva.neumorphic.shape.Oval
-import com.gandiva.neumorphic.shape.RoundedCorner
+import com.gandiva.neumorphic.model.CornerShape
+import com.gandiva.neumorphic.model.LightSource
+import com.gandiva.neumorphic.model.NeuShape
+import com.gandiva.neumorphic.model.NeuStyle
 
 internal expect fun Any.makeNormalBlur(
     blurRadius: Float,
@@ -21,22 +21,25 @@ internal expect fun Any.makeNormalBlur(
 )
 
 internal fun ContentDrawScope.drawBackgroundShadows(
-    neuShape: NeuShape, style: NeuStyle
+    neuShape: NeuShape,
+    style: NeuStyle
 ) {
     val elevation = style.shadowElevation.toPx()
 
-    drawBlurredBackground(
-        style.lightSource,
-        elevation,
-        style.lightShadowColor.toArgb(),
-        neuShape.cornerShape
-    )
-    drawBlurredBackground(
-        style.lightSource.opposite(),
-        elevation,
-        style.darkShadowColor.toArgb(),
-        neuShape.cornerShape
-    )
+    if (elevation > 0) {
+        drawBlurredBackground(
+            lightSource = style.lightSource,
+            elevation = elevation,
+            color = style.lightShadowColor.toArgb(),
+            cornerShape = neuShape.cornerShape
+        )
+        drawBlurredBackground(
+            lightSource = style.lightSource.opposite(),
+            elevation = elevation,
+            color = style.darkShadowColor.toArgb(),
+            cornerShape = neuShape.cornerShape
+        )
+    }
 }
 
 private fun ContentDrawScope.drawBlurredBackground(
@@ -46,12 +49,8 @@ private fun ContentDrawScope.drawBlurredBackground(
     cornerShape: CornerShape
 ) {
     drawIntoCanvas { canvas ->
-
         val blurRadius = elevation * .95f
         val displacement = elevation * .6f
-
-        if (blurRadius <= 0)
-            return@drawIntoCanvas
 
         val paint = Paint().also { p ->
             p.asFrameworkPaint().also { nativePaint ->
@@ -72,8 +71,8 @@ private fun ContentDrawScope.drawBlurredBackground(
         canvas.save()
         canvas.translate(backgroundOffset.x, backgroundOffset.y)
         when (cornerShape) {
-            is Oval -> canvas.drawOval(0f, 0f, this.size.width, this.size.height, paint)
-            is RoundedCorner -> canvas.drawRoundRect(
+            is CornerShape.Oval -> canvas.drawOval(0f, 0f, this.size.width, this.size.height, paint)
+            is CornerShape.Rounded -> canvas.drawRoundRect(
                 0f,
                 0f,
                 this.size.width,
@@ -88,22 +87,25 @@ private fun ContentDrawScope.drawBlurredBackground(
 }
 
 internal fun ContentDrawScope.drawForegroundShadows(
-    neuShape: NeuShape, style: NeuStyle
+    neuShape: NeuShape,
+    style: NeuStyle
 ) {
     val elevation = style.shadowElevation.toPx()
 
-    drawForeground(
-        style.lightSource,
-        elevation,
-        style.darkShadowColor.toArgb(),
-        neuShape.cornerShape
-    )
-    drawForeground(
-        style.lightSource.opposite(),
-        elevation,
-        style.lightShadowColor.toArgb(),
-        neuShape.cornerShape
-    )
+    if (elevation > 0) {
+        drawForeground(
+            lightSource = style.lightSource,
+            elevation = elevation,
+            color = style.darkShadowColor.toArgb(),
+            cornerShape = neuShape.cornerShape
+        )
+        drawForeground(
+            lightSource = style.lightSource.opposite(),
+            elevation = elevation,
+            color = style.lightShadowColor.toArgb(),
+            cornerShape = neuShape.cornerShape
+        )
+    }
 }
 
 private fun ContentDrawScope.drawForeground(
@@ -114,9 +116,6 @@ private fun ContentDrawScope.drawForeground(
 ) {
 
     drawIntoCanvas { canvas ->
-        if (elevation <= 0)
-            return@drawIntoCanvas
-
         val blurRadius = elevation * 0.6f
         val strokeWidth = elevation * .95f
 
@@ -137,7 +136,7 @@ private fun ContentDrawScope.drawForeground(
 
         canvas.save()
         when (cornerShape) {
-            is Oval -> {
+            is CornerShape.Oval -> {
                 val visiblePath = Path().also { p ->
                     p.moveTo(0f, 0f)
                     p.addOval(Rect(0f, 0f, this.size.width, this.size.height))
@@ -153,7 +152,7 @@ private fun ContentDrawScope.drawForeground(
                 )
             }
 
-            is RoundedCorner -> {
+            is CornerShape.Rounded -> {
                 val cornerRadius = cornerShape.radius.toPx()
                 val visiblePath = Path().also { p ->
                     p.moveTo(0f, 0f)
