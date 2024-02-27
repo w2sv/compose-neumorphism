@@ -22,5 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Neumorphism"
 
-//include(":app")
+include(":app")
 include(":neumorphic")

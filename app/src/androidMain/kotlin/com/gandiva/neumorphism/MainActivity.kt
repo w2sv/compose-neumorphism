@@ -27,62 +27,54 @@ class MainActivity : ComponentActivity() {
 
 @Preview
 @Composable
-fun AppAndroidPreview() {
+private fun AppAndroidPreview() {
     App()
 }
 
-
 @Preview
 @Composable
-fun InputBoxWithCardWrapperPreview() {
+private fun InputBoxWithCardWrapperPreview() {
     InputBoxWithCardWrapper()
 }
 
-
 @Preview
 @Composable
-fun PlainInputBoxPreview() {
+private fun PlainInputBoxPreview() {
     PlainInputBox()
 }
 
-
 @Preview
 @Composable
-fun CheckBoxAndRadioButtonsPreview() {
+private fun CheckBoxAndRadioButtonsPreview() {
     CheckBoxAndRadioButtons()
 }
 
-
 @Preview
 @Composable
-fun PressedSliderPreview() {
+private fun PressedSliderPreview() {
     PressedSlider()
 }
 
-
 @Preview
 @Composable
-fun FlatSliderPreview() {
+private fun FlatSliderPreview() {
     FlatSlider()
 }
 
-
 @Preview
 @Composable
-fun PressedButtonPreview() {
+private fun PressedButtonPreview() {
     PressedButton()
 }
 
-
 @Preview
 @Composable
-fun FlatButtonPreview() {
+private fun FlatButtonPreview() {
     FlatButton()
 }
 
-
 @Preview
 @Composable
-fun CircleActionButtonPreview() {
+private fun CircleActionButtonPreview() {
     CircleActionButton()
 }
