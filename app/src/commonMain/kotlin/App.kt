@@ -57,37 +57,36 @@ fun App() {
     }
     NeumorphismTheme(isDarkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 TitleWithThemeToggle(
                     title = "Neumorphic UI",
-                    isDarkTheme = isDarkTheme
-                ) {
-                    isDarkTheme = !isDarkTheme
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    InputBoxWithCardWrapper()
-                    PlainInputBox()
-                    CheckBoxAndRadioButtons()
-                    PressedSlider()
-                    FlatSlider()
-                    PressedButton()
-                    FlatButton()
-                    CircleActionButton()
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        PressedCard()
-                        ProtrudedCard()
+                    isDarkTheme = isDarkTheme,
+                    onThemeToggle = {
+                        isDarkTheme = !isDarkTheme
                     }
-                    PressedSwitch()
+                )
+                InputBoxWithCardWrapper()
+                PlainInputBox()
+                CheckBoxAndRadioButtons()
+                PressedSlider()
+                FlatSlider()
+                PressedButton()
+                FlatButton()
+                CircleActionButton()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    PressedCard()
+                    ProtrudedCard()
                 }
+                PressedSwitch()
             }
         }
     }
